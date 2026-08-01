@@ -1,0 +1,173 @@
+.register-page{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#E8F5E9,#F1F8E9);
+    padding:40px 20px;
+}
+
+.register-card{
+
+    width:850px;
+    max-width:100%;
+    background:#fff;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 12px 35px rgba(0,0,0,.12);
+
+}
+
+.register-logo{
+    text-align:center;
+    font-size:60px;
+    margin-bottom:10px;
+}
+
+.register-title{
+    text-align:center;
+    color:#2E7D32;
+    font-size:38px;
+    font-weight:700;
+    margin-bottom:8px;
+}
+
+.register-subtitle{
+    text-align:center;
+    color:#666;
+    font-size:18px;
+    margin-bottom:35px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+}
+
+.form-grid input{
+
+    width:100%;
+    height:56px;
+
+    padding:0 20px;
+
+    font-size:17px;
+
+    border:2px solid #dcdcdc;
+
+    border-radius:12px;
+
+    outline:none;
+
+    box-sizing:border-box;
+
+    transition:.3s;
+
+}
+
+.form-grid input:focus{
+
+    border-color:#2E7D32;
+
+    box-shadow:0 0 10px rgba(46,125,50,.2);
+
+}
+
+.form-grid input::placeholder{
+
+    color:#888;
+
+    opacity:1;
+
+}
+
+.full-width{
+    grid-column:1 / -1;
+}
+
+.register-btn{
+
+    width:100%;
+
+    height:56px;
+
+    margin-top:30px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#2E7D32;
+
+    color:white;
+
+    font-size:20px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.register-btn:hover{
+
+    background:#1B5E20;
+
+    transform:translateY(-2px);
+
+}
+
+.login-link{
+
+    text-align:center;
+
+    margin-top:25px;
+
+    font-size:17px;
+
+}
+
+.login-link a{
+
+    color:#2E7D32;
+
+    text-decoration:none;
+
+    font-weight:600;
+
+}
+
+.login-link a:hover{
+
+    text-decoration:underline;
+
+}
+
+@media(max-width:768px){
+
+    .register-card{
+
+        width:100%;
+
+        padding:30px 20px;
+
+    }
+
+    .form-grid{
+
+        grid-template-columns:1fr;
+
+        gap:18px;
+
+    }
+
+    .register-title{
+
+        font-size:30px;
+
+    }
+
+}

@@ -1,0 +1,144 @@
+.addcrop-page{
+    min-height:100vh;
+    background:linear-gradient(135deg,#E8F5E9,#F4F8F2);
+    padding:40px 20px;
+}
+
+.addcrop-card{
+
+    max-width:750px;
+    margin:0 auto;
+
+    background:white;
+
+    padding:40px;
+
+    border-radius:18px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+
+}
+
+.addcrop-title{
+
+    text-align:center;
+
+    color:#2E7D32;
+
+    font-size:36px;
+
+    margin-bottom:10px;
+
+}
+
+.addcrop-subtitle{
+
+    text-align:center;
+
+    color:#666;
+
+    margin-bottom:35px;
+
+}
+
+.form-grid{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:20px;
+
+}
+
+.full-width{
+
+    grid-column:1 / -1;
+
+}
+
+.form-group{
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+.form-group label{
+
+    margin-bottom:8px;
+
+    font-weight:600;
+
+    color:#2E7D32;
+
+}
+
+.form-group input,
+.form-group select{
+
+    height:50px;
+
+    border-radius:10px;
+
+    border:1px solid #ccc;
+
+    padding:10px 14px;
+
+    font-size:16px;
+
+}
+
+.form-group input:focus,
+.form-group select:focus{
+
+    outline:none;
+
+    border-color:#2E7D32;
+
+}
+
+.button-group{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:20px;
+
+    margin-top:35px;
+
+}
+
+.button-group button{
+
+    width:180px;
+
+    height:50px;
+
+    font-size:17px;
+
+}
+
+.cancel-btn{
+
+    background:#9E9E9E;
+
+}
+
+.cancel-btn:hover{
+
+    background:#757575;
+
+}
+
+@media(max-width:768px){
+
+.form-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}
