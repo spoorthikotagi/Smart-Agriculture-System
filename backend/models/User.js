@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
+
     fullName: {
         type: String,
         required: true,
@@ -10,9 +11,9 @@ const userSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
-        trim: true,
         unique: true,
-        lowercase: true
+        lowercase: true,
+        trim: true
     },
 
     mobile: {
@@ -52,6 +53,7 @@ const userSchema = new mongoose.Schema({
 
     primaryCrop: {
         type: String,
+        required: true,
         trim: true
     },
 
@@ -61,10 +63,9 @@ const userSchema = new mongoose.Schema({
         default: "Farmer"
     }
 
-}, 
+},
 {
     timestamps: true
 });
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+module.exports = mongoose.model("User", userSchema);

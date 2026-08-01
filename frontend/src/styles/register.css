@@ -171,3 +171,20 @@
     }
 
 }
+
+.form-grid select{
+    width:100%;
+    height:55px;
+    padding:0 18px;
+    font-size:17px;
+    border:2px solid #dcdcdc;
+    border-radius:10px;
+    box-sizing:border-box;
+    outline:none;
+    background:white;
+    transition:.3s;
+}
+
+.form-grid select:focus{
+    border-color:#2E7D32;
+}

@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaSeedling } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { State, City } from "country-state-city";
+
 import api from "../services/api";
 import "../styles/register.css";
 
@@ -9,23 +11,87 @@ function Register() {
 
     const navigate = useNavigate();
 
+    const [states, setStates] = useState([]);
+
+    const [districts, setDistricts] = useState([]);
+
     const [formData, setFormData] = useState({
+
         fullName: "",
         mobile: "",
+
         state: "",
         district: "",
         village: "",
+
         landArea: "",
         primaryCrop: "",
+
         email: "",
         password: ""
+
     });
+
+    useEffect(() => {
+
+        const allStates = State.getStatesOfCountry("IN");
+
+        setStates(allStates);
+
+    }, []);
 
     const handleChange = (e) => {
 
+        const { name, value } = e.target;
+
+        if (name === "state") {
+
+            const selectedState = states.find(
+
+                (state) => state.name === value
+
+            );
+
+            if (selectedState) {
+
+                const cities = City.getCitiesOfState(
+
+                    "IN",
+
+                    selectedState.isoCode
+
+                );
+
+                setDistricts(cities);
+
+            }
+
+            else {
+
+                setDistricts([]);
+
+            }
+
+            setFormData({
+
+                ...formData,
+
+                state: value,
+
+                district: ""
+
+            });
+
+            return;
+
+        }
+
         setFormData({
+
             ...formData,
-            [e.target.name]: e.target.value
+
+            [name]: value
+
         });
 
     };
@@ -36,7 +102,13 @@ function Register() {
 
         try {
 
-            const response = await api.post("/auth/register", formData);
+            const response = await api.post(
+
+                "/auth/register",
+
+                formData
+
+            );
 
             toast.success(response.data.message);
 
@@ -44,20 +116,24 @@ function Register() {
 
                 navigate("/login");
 
-            }, 800);
+            }, 1000);
 
-        } catch (error) {
+        }
+
+        catch (error) {
 
             toast.error(
+
                 error.response?.data?.message ||
+
                 "Registration Failed"
+
             );
 
         }
 
     };
-
-    return (
+        return (
 
         <div className="register-page">
 
@@ -70,11 +146,15 @@ function Register() {
                 </div>
 
                 <h1 className="register-title">
+
                     🌾 Farmer Registration
+
                 </h1>
 
                 <p className="register-subtitle">
+
                     Create your Smart Agriculture account
+
                 </p>
 
                 <form onSubmit={handleSubmit}>
@@ -99,23 +179,64 @@ function Register() {
                             required
                         />
 
-                        <input
-                            type="text"
+                        <select
                             name="state"
-                            placeholder="State"
                             value={formData.state}
                             onChange={handleChange}
                             required
-                        />
+                        >
+                            <option value="">
+                                Select State
+                            </option>
 
-                        <input
-                            type="text"
+                            {
+
+                                states.map((state) => (
+
+                                    <option
+                                        key={state.isoCode}
+                                        value={state.name}
+                                    >
+
+                                        {state.name}
+
+                                    </option>
+
+                                ))
+
+                            }
+
+                        </select>
+
+                        <select
                             name="district"
-                            placeholder="District"
                             value={formData.district}
                             onChange={handleChange}
                             required
-                        />
+                            disabled={!formData.state}
+                        >
+                            <option value="">
+                                Select District
+                            </option>
+
+                            {
+
+                                districts.map((district) => (
+
+                                    <option
+                                        key={district.name}
+                                        value={district.name}
+                                    >
+
+                                        {district.name}
+
+                                    </option>
+
+                                ))
+
+                            }
+
+                        </select>
 
                         <input
                             type="text"
@@ -164,14 +285,16 @@ function Register() {
                             required
                         />
 
-                    </div>
+                        <button
+                            className="register-btn full-width"
+                            type="submit"
+                        >
 
-                    <button
-                        className="register-btn"
-                        type="submit"
-                    >
-                        Register
-                    </button>
+                            Register
+
+                        </button>
+
+                    </div>
 
                 </form>
 
@@ -180,12 +303,13 @@ function Register() {
                     Already have an account?
 
                     <Link to="/login">
+
                         {" "}Login
+
                     </Link>
 
                 </p>
-
-            </div>
+                            </div>
 
         </div>
 
