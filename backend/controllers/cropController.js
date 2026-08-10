@@ -1,7 +1,6 @@
 const Crop = require("../models/Crop");
 const axios = require("axios");
 
-
 // =====================================================
 // Add Crop
 // =====================================================
@@ -46,10 +45,14 @@ const addCrop = async (req, res) => {
 
         });
 
+    }
 
-    } catch (error) {
+    catch (error) {
 
-        console.error(error);
+        console.error(
+            "Add Crop Error:",
+            error
+        );
 
 
         return res.status(500).json({
@@ -80,10 +83,14 @@ const getMyCrops = async (req, res) => {
 
         return res.status(200).json(crops);
 
+    }
 
-    } catch (error) {
+    catch (error) {
 
-        console.error(error);
+        console.error(
+            "Get Crops Error:",
+            error
+        );
 
 
         return res.status(500).json({
@@ -109,13 +116,16 @@ const updateCrop = async (req, res) => {
 
             {
                 _id: req.params.id,
+
                 farmer: req.user.id
             },
 
             req.body,
 
             {
-                new: true
+                new: true,
+
+                runValidators: true
             }
 
         );
@@ -140,10 +150,14 @@ const updateCrop = async (req, res) => {
 
         });
 
+    }
 
-    } catch (error) {
+    catch (error) {
 
-        console.error(error);
+        console.error(
+            "Update Crop Error:",
+            error
+        );
 
 
         return res.status(500).json({
@@ -191,10 +205,14 @@ const deleteCrop = async (req, res) => {
 
         });
 
+    }
 
-    } catch (error) {
+    catch (error) {
 
-        console.error(error);
+        console.error(
+            "Delete Crop Error:",
+            error
+        );
 
 
         return res.status(500).json({
@@ -217,6 +235,7 @@ const predictYield = async (req, res) => {
     try {
 
         const {
+
             Crop,
             Crop_Year,
             Season,
@@ -225,18 +244,71 @@ const predictYield = async (req, res) => {
             Annual_Rainfall,
             Fertilizer,
             Pesticide
+
         } = req.body;
 
 
         // ---------------------------------------------
-        // Send data to Python ML API
+        // Validate Required Fields
+        // ---------------------------------------------
+
+        const requiredFields = {
+
+            Crop,
+            Crop_Year,
+            Season,
+            State,
+            Area,
+            Annual_Rainfall,
+            Fertilizer,
+            Pesticide
+
+        };
+
+
+        for (const [field, value] of Object.entries(
+            requiredFields
+        )) {
+
+            if (
+                value === undefined ||
+                value === null ||
+                value === ""
+            ) {
+
+                return res.status(400).json({
+
+                    success: false,
+
+                    message:
+                        `${field} is required`
+
+                });
+
+            }
+
+        }
+
+
+        // ---------------------------------------------
+        // ML Service URL
+        // ---------------------------------------------
+
+        const ML_SERVICE_URL =
+            process.env.ML_SERVICE_URL ||
+            "https://smart-agriculture-ml-205h.onrender.com";
+
+
+        // ---------------------------------------------
+        // Send Data to Python ML API
         // ---------------------------------------------
 
         const response = await axios.post(
 
-            "http://localhost:5001/predict",
+            `${ML_SERVICE_URL}/predict`,
 
             {
+
                 Crop,
                 Crop_Year,
                 Season,
@@ -245,13 +317,42 @@ const predictYield = async (req, res) => {
                 Annual_Rainfall,
                 Fertilizer,
                 Pesticide
+
+            },
+
+            {
+
+                timeout: 60000
+
             }
 
         );
 
 
         // ---------------------------------------------
-        // Return prediction to React
+        // Check ML Response
+        // ---------------------------------------------
+
+        if (
+            !response.data ||
+            response.data.success !== true
+        ) {
+
+            return res.status(500).json({
+
+                success: false,
+
+                message:
+                    response.data?.message ||
+                    "ML service failed to generate prediction"
+
+            });
+
+        }
+
+
+        // ---------------------------------------------
+        // Return Prediction to React
         // ---------------------------------------------
 
         return res.status(200).json({
@@ -263,16 +364,24 @@ const predictYield = async (req, res) => {
 
         });
 
+    }
 
-    } catch (error) {
+    catch (error) {
 
         console.error(
-
             "ML Prediction Error:",
-
             error.message
-
         );
+
+
+        if (error.response) {
+
+            console.error(
+                "ML Service Response:",
+                error.response.data
+            );
+
+        }
 
 
         return res.status(500).json({
