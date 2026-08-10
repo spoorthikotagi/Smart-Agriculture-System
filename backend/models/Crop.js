@@ -11,7 +11,7 @@ const cropSchema = new mongoose.Schema(
         season: {
             type: String,
             required: true,
-            enum: ["Kharif", "Rabi", "Zaid"]
+            enum: ["Kharif", "Rabi", "Zaid", "Whole Year", "Autumn", "Summer", "Winter"]
         },
 
         area: {
@@ -33,6 +33,12 @@ const cropSchema = new mongoose.Schema(
             type: String,
             enum: ["Planned", "Growing", "Harvested"],
             default: "Planned"
+        },
+
+        // AI predicted crop yield
+        predictedYield: {
+            type: Number,
+            default: null
         },
 
         farmer: {

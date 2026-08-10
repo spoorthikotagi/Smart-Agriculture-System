@@ -219,3 +219,19 @@
     transform:translateY(-2px);
 
 }
+
+.predicted-yield {
+    display: inline-block;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #E8F5E9;
+    color: #2E7D32;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.no-prediction {
+    color: #999;
+    font-style: italic;
+    white-space: nowrap;
+}

@@ -1,10 +1,25 @@
 import { Link, useNavigate } from "react-router-dom";
-import { FaLeaf, FaHome, FaPlusCircle, FaList, FaSignOutAlt } from "react-icons/fa";
+
+import {
+    FaLeaf,
+    FaHome,
+    FaPlusCircle,
+    FaList,
+    FaSignOutAlt,
+    FaSeedling
+} from "react-icons/fa";
+
 import "../styles/navbar.css";
+
 
 function Navbar() {
 
     const navigate = useNavigate();
+
+
+    // =====================================================
+    // Logout
+    // =====================================================
 
     const handleLogout = () => {
 
@@ -14,40 +29,97 @@ function Navbar() {
 
     };
 
+
     return (
 
         <nav className="navbar">
 
+
+            {/* Logo */}
+
             <div className="logo">
+
                 <FaLeaf />
-                <span>Smart Agriculture</span>
+
+                <span>
+                    Smart Agriculture
+                </span>
+
             </div>
+
+
+            {/* Navigation */}
 
             <ul className="nav-links">
 
+
                 <li>
+
                     <Link to="/dashboard">
-                        <FaHome /> Dashboard
+
+                        <FaHome />
+
+                        Dashboard
+
                     </Link>
+
                 </li>
 
+
                 <li>
+
                     <Link to="/add-crop">
-                        <FaPlusCircle /> Add Crop
+
+                        <FaPlusCircle />
+
+                        Add Crop
+
                     </Link>
+
                 </li>
 
+
                 <li>
+
                     <Link to="/crops">
-                        <FaList /> My Crops
+
+                        <FaList />
+
+                        My Crops
+
                     </Link>
+
                 </li>
 
+
                 <li>
-                    <button className="logout-btn" onClick={handleLogout}>
-                        <FaSignOutAlt /> Logout
-                    </button>
+
+                    <Link to="/recommendations">
+
+                        <FaSeedling />
+
+                        Recommendations
+
+                    </Link>
+
                 </li>
+
+
+                <li>
+
+                    <button
+                        className="logout-btn"
+                        onClick={handleLogout}
+                    >
+
+                        <FaSignOutAlt />
+
+                        Logout
+
+                    </button>
+
+                </li>
+
 
             </ul>
 

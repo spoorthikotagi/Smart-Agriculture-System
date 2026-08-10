@@ -15,11 +15,17 @@ function CropList() {
 
     const navigate = useNavigate();
 
+
+    // =====================================================
+    // Fetch Crops
+    // =====================================================
+
     useEffect(() => {
 
         fetchCrops();
 
     }, []);
+
 
     const fetchCrops = async () => {
 
@@ -27,15 +33,14 @@ function CropList() {
 
             const token = localStorage.getItem("token");
 
-            const response = await api.get("/crops", {
-
-                headers: {
-
-                    Authorization: `Bearer ${token}`
-
+            const response = await api.get(
+                "/crops",
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 }
-
-            });
+            );
 
             setCrops(response.data);
 
@@ -43,11 +48,20 @@ function CropList() {
 
         catch (error) {
 
-            toast.error("Unable to fetch crops.");
+            console.error(error);
+
+            toast.error(
+                "Unable to fetch crops."
+            );
 
         }
 
     };
+
+
+    // =====================================================
+    // Delete Crop
+    // =====================================================
 
     const deleteCrop = async (id) => {
 
@@ -71,24 +85,33 @@ function CropList() {
 
         });
 
-        if (!result.isConfirmed)
+
+        if (!result.isConfirmed) {
+
             return;
+
+        }
+
 
         try {
 
             const token = localStorage.getItem("token");
 
-            await api.delete(`/crops/${id}`, {
 
-                headers: {
-
-                    Authorization: `Bearer ${token}`
-
+            await api.delete(
+                `/crops/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
                 }
+            );
 
-            });
 
-            toast.success("Crop Deleted Successfully!");
+            toast.success(
+                "Crop Deleted Successfully!"
+            );
+
 
             await fetchCrops();
 
@@ -96,25 +119,42 @@ function CropList() {
 
         catch (error) {
 
-            toast.error("Unable to delete crop.");
+            console.error(error);
+
+            toast.error(
+                "Unable to delete crop."
+            );
 
         }
 
     };
 
+
+    // =====================================================
+    // Search + Status Filter
+    // =====================================================
+
     const filteredCrops = crops.filter((crop) => {
 
-        const matchesSearch = crop.cropName
-            .toLowerCase()
-            .includes(search.toLowerCase());
+        const matchesSearch =
+            crop.cropName
+                .toLowerCase()
+                .includes(search.toLowerCase());
+
 
         const matchesStatus =
             statusFilter === "All" ||
             crop.status === statusFilter;
 
+
         return matchesSearch && matchesStatus;
 
     });
+
+
+    // =====================================================
+    // JSX
+    // =====================================================
 
     return (
 
@@ -122,7 +162,13 @@ function CropList() {
 
             <Navbar />
 
+
             <div className="crops-page">
+
+
+                {/* ========================================= */}
+                {/* Page Title */}
+                {/* ========================================= */}
 
                 <h1 className="page-title">
 
@@ -130,78 +176,180 @@ function CropList() {
 
                 </h1>
 
+
+                {/* ========================================= */}
+                {/* Search + Filter */}
+                {/* ========================================= */}
+
                 <div className="search-filter">
+
 
                     <div className="search-box">
 
                         <FaSearch className="search-icon" />
 
+
                         <input
                             type="text"
                             placeholder="Search Crop..."
                             value={search}
-                            onChange={(e) => setSearch(e.target.value)}
+                            onChange={(e) =>
+                                setSearch(e.target.value)
+                            }
                         />
 
                     </div>
 
+
                     <select
                         value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
+                        onChange={(e) =>
+                            setStatusFilter(e.target.value)
+                        }
                     >
 
-                        <option value="All">All Status</option>
-                        <option value="Planned">Planned</option>
-                        <option value="Growing">Growing</option>
-                        <option value="Harvested">Harvested</option>
+                        <option value="All">
+                            All Status
+                        </option>
+
+                        <option value="Planned">
+                            Planned
+                        </option>
+
+                        <option value="Growing">
+                            Growing
+                        </option>
+
+                        <option value="Harvested">
+                            Harvested
+                        </option>
 
                     </select>
 
                 </div>
 
+
+                {/* ========================================= */}
+                {/* Crop Table */}
+                {/* ========================================= */}
+
                 <div className="table-container">
 
                     <table className="crop-table">
+
 
                         <thead>
 
                             <tr>
 
-                                <th>Crop</th>
-                                <th>Season</th>
-                                <th>Area</th>
-                                <th>Sowing Date</th>
-                                <th>Harvest Date</th>
-                                <th>Status</th>
-                                <th>Actions</th>
+                                <th>
+                                    Crop
+                                </th>
+
+                                <th>
+                                    Season
+                                </th>
+
+                                <th>
+                                    Area
+                                </th>
+
+                                <th>
+                                    Sowing Date
+                                </th>
+
+                                <th>
+                                    Harvest Date
+                                </th>
+
+                                <th>
+                                    Status
+                                </th>
+
+                                <th>
+                                    🤖 AI Predicted Yield
+                                </th>
+
+                                <th>
+                                    Actions
+                                </th>
 
                             </tr>
 
                         </thead>
 
+
                         <tbody>
 
                             {
 
-                                filteredCrops.length > 0 ?
+                                filteredCrops.length > 0
+
+                                    ?
 
                                     filteredCrops.map((crop) => (
 
                                         <tr key={crop._id}>
 
-                                            <td>{crop.cropName}</td>
 
-                                            <td>{crop.season}</td>
-
-                                            <td>{crop.area} Acres</td>
-
-                                            <td>{new Date(crop.sowingDate).toLocaleDateString()}</td>
-
-                                            <td>{new Date(crop.expectedHarvestDate).toLocaleDateString()}</td>
+                                            {/* Crop */}
 
                                             <td>
 
-                                                <span className={`status ${crop.status.toLowerCase()}`}>
+                                                {crop.cropName}
+
+                                            </td>
+
+
+                                            {/* Season */}
+
+                                            <td>
+
+                                                {crop.season}
+
+                                            </td>
+
+
+                                            {/* Area */}
+
+                                            <td>
+
+                                                {crop.area} Acres
+
+                                            </td>
+
+
+                                            {/* Sowing Date */}
+
+                                            <td>
+
+                                                {new Date(
+                                                    crop.sowingDate
+                                                ).toLocaleDateString()}
+
+                                            </td>
+
+
+                                            {/* Harvest Date */}
+
+                                            <td>
+
+                                                {new Date(
+                                                    crop.expectedHarvestDate
+                                                ).toLocaleDateString()}
+
+                                            </td>
+
+
+                                            {/* Status */}
+
+                                            <td>
+
+                                                <span
+                                                    className={
+                                                        `status ${crop.status.toLowerCase()}`
+                                                    }
+                                                >
 
                                                     {crop.status}
 
@@ -209,25 +357,77 @@ function CropList() {
 
                                             </td>
 
+
+                                            {/* ================================= */}
+                                            {/* AI Prediction */}
+                                            {/* ================================= */}
+
                                             <td>
+
+                                                {
+
+                                                    crop.predictedYield !== null &&
+                                                    crop.predictedYield !== undefined
+
+                                                        ?
+
+                                                        <span className="predicted-yield">
+
+                                                            🌾{" "}
+
+                                                            {Number(
+                                                                crop.predictedYield
+                                                            ).toFixed(4)}
+
+                                                            {" tonnes/hectare"}
+
+                                                        </span>
+
+                                                        :
+
+                                                        <span className="no-prediction">
+
+                                                            Not predicted
+
+                                                        </span>
+
+                                                }
+
+                                            </td>
+
+
+                                            {/* Actions */}
+
+                                            <td>
+
 
                                                 <button
                                                     className="edit-btn"
-                                                    onClick={() => navigate(`/edit-crop/${crop._id}`)}
+                                                    onClick={() =>
+                                                        navigate(
+                                                            `/edit-crop/${crop._id}`
+                                                        )
+                                                    }
                                                 >
 
                                                     <FaEdit />
 
                                                 </button>
 
+
                                                 <button
                                                     className="delete-btn"
-                                                    onClick={() => deleteCrop(crop._id)}
+                                                    onClick={() =>
+                                                        deleteCrop(
+                                                            crop._id
+                                                        )
+                                                    }
                                                 >
 
                                                     <FaTrash />
 
                                                 </button>
+
 
                                             </td>
 
@@ -239,7 +439,9 @@ function CropList() {
 
                                     <tr>
 
-                                        <td colSpan="7">
+                                        <td
+                                            colSpan="8"
+                                        >
 
                                             <div
                                                 style={{
@@ -248,10 +450,17 @@ function CropList() {
                                                 }}
                                             >
 
-                                                <h3>🌱 No Crops Found</h3>
+                                                <h3>
+                                                    🌱 No Crops Found
+                                                </h3>
+
 
                                                 <p>
-                                                    Add your first crop to start managing your farm.
+
+                                                    Add your first crop
+                                                    to start managing
+                                                    your farm.
+
                                                 </p>
 
                                             </div>
@@ -268,14 +477,22 @@ function CropList() {
 
                 </div>
 
+
+                {/* ========================================= */}
+                {/* Back Button */}
+                {/* ========================================= */}
+
                 <button
                     className="back-btn"
-                    onClick={() => navigate("/dashboard")}
+                    onClick={() =>
+                        navigate("/dashboard")
+                    }
                 >
 
                     ← Back to Dashboard
 
                 </button>
+
 
             </div>
 
@@ -284,5 +501,6 @@ function CropList() {
     );
 
 }
+
 
 export default CropList;

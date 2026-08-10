@@ -1,21 +1,61 @@
 const express = require("express");
+
 const router = express.Router();
+
 
 const {
     addCrop,
     getMyCrops,
     updateCrop,
-    deleteCrop
+    deleteCrop,
+    predictYield
 } = require("../controllers/cropController");
+
 
 const authMiddleware = require("../middleware/authMiddleware");
 
-router.post("/", authMiddleware, addCrop);
 
-router.get("/", authMiddleware, getMyCrops);
+// =====================================================
+// Crop CRUD Routes
+// =====================================================
 
-router.put("/:id", authMiddleware, updateCrop);
+router.post(
+    "/",
+    authMiddleware,
+    addCrop
+);
 
-router.delete("/:id", authMiddleware, deleteCrop);
+
+router.get(
+    "/",
+    authMiddleware,
+    getMyCrops
+);
+
+
+router.put(
+    "/:id",
+    authMiddleware,
+    updateCrop
+);
+
+
+router.delete(
+    "/:id",
+    authMiddleware,
+    deleteCrop
+);
+
+
+// =====================================================
+// ML Prediction Route
+// =====================================================
+
+router.post(
+    "/predict-yield",
+    authMiddleware,
+    predictYield
+);
+
 
 module.exports = router;
